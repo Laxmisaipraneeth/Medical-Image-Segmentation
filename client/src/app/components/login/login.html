@@ -1,0 +1,90 @@
+<div class="auth-page">
+  <!-- Decorative Left Panel -->
+  <div class="auth-panel">
+    <div class="panel-content">
+      <div class="panel-brand">
+        <span class="material-symbols-rounded" style="font-size: 32px;">neurology</span>
+        <span class="panel-brand-text">MedSeg</span>
+      </div>
+
+      <div class="panel-hero">
+        <h2>AI-Powered<br/>Medical Image<br/>Segmentation</h2>
+        <p>The most intuitive platform for radiologists to analyze, segment, and interpret medical images using universal AI.</p>
+      </div>
+
+      <div class="panel-features">
+        <div class="panel-feature">
+          <span class="material-symbols-rounded" style="font-size: 18px;">speed</span>
+          <span>Results in under 30 seconds</span>
+        </div>
+        <div class="panel-feature">
+          <span class="material-symbols-rounded" style="font-size: 18px;">devices</span>
+          <span>Works with any modality</span>
+        </div>
+        <div class="panel-feature">
+          <span class="material-symbols-rounded" style="font-size: 18px;">lock</span>
+          <span>Secure & HIPAA-ready</span>
+        </div>
+      </div>
+
+      <!-- Decorative grid dots -->
+      <div class="panel-dots"></div>
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="auth-form-side">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>Welcome back</h1>
+        <p>Sign in to your MedSeg account</p>
+      </div>
+
+      <div class="alert alert-error" *ngIf="error">
+        <span class="material-symbols-rounded">error</span>
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="you@hospital.com"
+            required
+          />
+        </div>
+
+        <div class="form-group mb-6">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" [disabled]="loading || !email || !password">
+          <span *ngIf="loading" class="spinner spinner-sm mr-2"></span>
+          {{ loading ? 'Signing in...' : 'Sign In' }}
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span>or</span>
+      </div>
+
+      <p class="auth-footer text-center">
+        New to MedSeg? <a routerLink="/register" class="auth-link">Create an account</a>
+      </p>
+    </div>
+  </div>
+</div>

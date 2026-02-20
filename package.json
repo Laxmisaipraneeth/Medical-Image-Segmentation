@@ -1,0 +1,14 @@
+{
+  "name": "medseg-prototype",
+  "version": "1.0.0",
+  "description": "Start all services for MedSeg",
+  "scripts": {
+    "start": "concurrently \"npm run start:client\" \"npm run start:backend\" \"npm run start:ml\"",
+    "start:client": "cd client && ng serve --port 4200",
+    "start:backend": "cd backend && nodemon server.js",
+    "start:ml": "cd ml_service && source venv/bin/activate && python app.py"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

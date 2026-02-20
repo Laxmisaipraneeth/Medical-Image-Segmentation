@@ -1,0 +1,133 @@
+<div class="landing">
+  <!-- Navigation -->
+  <nav class="landing-nav">
+    <div class="nav-brand">
+      <span class="material-symbols-rounded brand-icon-glyph">neurology</span>
+      <span class="nav-brand-text">MedSeg</span>
+    </div>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#how-it-works" class="nav-link">How It Works</a>
+      <a routerLink="/login" class="btn btn-ghost">Sign In</a>
+      <a routerLink="/register" class="btn btn-primary">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="material-symbols-rounded" style="font-size: 14px;">auto_awesome</span>
+        Powered by UniverSeg AI
+      </div>
+      <h1 class="hero-title">
+        Medical Image<br/>
+        <span class="hero-title-accent">Segmentation</span><br/>
+        Reimagined.
+      </h1>
+      <p class="hero-subtitle">
+        Upload. Segment. Analyze. The most intuitive AI-powered platform
+        for radiologists to perform universal medical image segmentation
+        — across any anatomy, any modality.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/register" class="btn btn-primary btn-lg">
+          Start Free
+          <span class="material-symbols-rounded" style="font-size: 18px;">arrow_forward</span>
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary btn-lg">
+          See How It Works
+        </a>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="stats-strip">
+        <div class="stat-item" *ngFor="let s of stats">
+          <div class="stat-value">{{ s.value }}</div>
+          <div class="stat-label">{{ s.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-container">
+      <div class="section-label">CAPABILITIES</div>
+      <h2 class="section-title">Everything you need for<br/>medical image analysis</h2>
+      <p class="section-subtitle">
+        From upload to insight — a complete workflow designed for clinical professionals.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let f of features">
+          <div class="feature-icon-wrapper">
+            <span class="material-symbols-rounded feature-icon">{{ f.icon }}</span>
+          </div>
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-section" id="how-it-works">
+    <div class="section-container">
+      <div class="section-label">WORKFLOW</div>
+      <h2 class="section-title">Three steps to clarity</h2>
+      <p class="section-subtitle">
+        A streamlined process built for speed and simplicity.
+      </p>
+
+      <div class="steps-row">
+        <div class="how-step">
+          <div class="step-number">01</div>
+          <h3>Create a Case</h3>
+          <p>Enter patient metadata — name, modality, body part, clinical notes. Everything stays organized.</p>
+        </div>
+        <div class="step-connector">
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </div>
+        <div class="how-step">
+          <div class="step-number">02</div>
+          <h3>Upload & Segment</h3>
+          <p>Drag and drop medical images. Optionally provide support sets. Hit run — our AI does the rest.</p>
+        </div>
+        <div class="step-connector">
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </div>
+        <div class="how-step">
+          <div class="step-number">03</div>
+          <h3>Review Results</h3>
+          <p>View segmentation masks overlaid on originals. Adjust opacity, compare slices, and export findings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-glow"></div>
+    <div class="section-container cta-content">
+      <h2>Ready to transform your workflow?</h2>
+      <p>Join radiologists who trust MedSeg for faster, smarter segmentation.</p>
+      <a routerLink="/register" class="btn btn-primary btn-lg">
+        Create Free Account
+        <span class="material-symbols-rounded" style="font-size: 18px;">arrow_forward</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="material-symbols-rounded" style="font-size: 22px;">neurology</span>
+        <span>MedSeg</span>
+      </div>
+      <p class="footer-copy">© 2026 MedSeg. AI-powered medical image segmentation.</p>
+    </div>
+  </footer>
+</div>

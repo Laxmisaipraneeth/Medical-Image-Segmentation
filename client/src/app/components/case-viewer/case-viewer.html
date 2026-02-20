@@ -1,0 +1,138 @@
+<div class="case-viewer" *ngIf="!loading && caseData">
+  <!-- Header -->
+  <div class="viewer-header">
+    <div>
+      <h1 class="text-primary font-semibold">{{ caseData.patientDetails.patientName }}</h1>
+      <p class="text-muted">
+        {{ caseData.patientDetails.modality }} · {{ caseData.patientDetails.bodyPart }} ·
+        ID: {{ caseData.patientDetails.patientId }}
+      </p>
+    </div>
+    <div class="header-actions">
+      <span class="badge" [ngClass]="{
+        'badge-success': caseData.status === 'completed',
+        'badge-processing': caseData.status === 'processing',
+        'badge-error': caseData.status === 'error',
+        'badge-created': caseData.status === 'created'
+      }">{{ caseData.status }}</span>
+      <button class="btn btn-danger btn-sm flex items-center gap-1" (click)="deleteCase()">
+        <span class="material-symbols-rounded" style="font-size: 16px;">delete</span>
+        Delete
+      </button>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    <span class="material-symbols-rounded">error</span>
+    {{ error }}
+  </div>
+
+  <div class="viewer-body">
+    <!-- Image Viewer -->
+    <div class="viewer-main card">
+      <div class="image-container">
+        <img [src]="currentOriginal" alt="Original" class="viewer-image" *ngIf="currentOriginal" />
+        <img [src]="currentMask" alt="Mask"
+          class="viewer-mask"
+          *ngIf="hasMask && showMask"
+          [style.opacity]="maskOpacity"
+        />
+        <div class="no-image" *ngIf="!currentOriginal">
+          <span class="material-symbols-rounded text-muted mb-2" style="font-size: 32px;">image-not-supported</span>
+          <p class="text-muted">No image available</p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="viewer-controls" *ngIf="hasMask">
+        <div class="control-group">
+          <label>Mask Opacity</label>
+          <input type="range" min="0" max="1" step="0.05"
+            [(ngModel)]="maskOpacity"
+          />
+          <span>{{ (maskOpacity * 100) | number:'1.0-0' }}%</span>
+        </div>
+        <button class="btn btn-secondary btn-sm flex items-center gap-1" (click)="toggleMask()">
+          <span class="material-symbols-rounded" style="font-size: 18px;">
+            {{ showMask ? 'visibility_off' : 'visibility' }}
+          </span>
+          {{ showMask ? 'Hide Mask' : 'Show Mask' }}
+        </button>
+      </div>
+
+      <!-- Thumbnail Strip -->
+      <div class="thumbnail-strip" *ngIf="caseData.originalImages.length > 1">
+        <div *ngFor="let img of caseData.originalImages; let i = index"
+          class="thumbnail"
+          [class.active]="i === selectedImageIndex"
+          (click)="selectImage(i)"
+        >
+          <img [src]="getImageUrl(img)" alt="Thumbnail" />
+          <span class="thumb-index">{{ i + 1 }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patient Details Sidebar -->
+    <div class="viewer-sidebar card">
+      <h3 class="flex items-center gap-2">
+        <span class="material-symbols-rounded text-primary" style="font-size: 20px;">info</span>
+        Patient Details
+      </h3>
+      <div class="detail-row">
+        <span class="detail-label">Name</span>
+        <span class="font-medium">{{ caseData.patientDetails.patientName }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Patient ID</span>
+        <span>{{ caseData.patientDetails.patientId }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Age</span>
+        <span>{{ caseData.patientDetails.age }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Gender</span>
+        <span>{{ caseData.patientDetails.gender }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Modality</span>
+        <span>{{ caseData.patientDetails.modality }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Body Part</span>
+        <span>{{ caseData.patientDetails.bodyPart }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Study Date</span>
+        <span>{{ caseData.patientDetails.studyDate | date:'mediumDate' }}</span>
+      </div>
+      <div class="detail-row flex-col items-start gap-1" *ngIf="caseData.patientDetails.clinicalNotes">
+        <span class="detail-label">Notes</span>
+        <span class="text-secondary text-sm">{{ caseData.patientDetails.clinicalNotes }}</span>
+      </div>
+      
+      <h3 class="flex items-center gap-2 mt-6">
+        <span class="material-symbols-rounded text-primary" style="font-size: 20px;">folder</span>
+        Files
+      </h3>
+      <div class="detail-row">
+        <span class="detail-label">Images</span>
+        <span>{{ caseData.originalImages.length }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Masks</span>
+        <span>{{ caseData.segmentedImages.length }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Created</span>
+        <span>{{ caseData.createdAt | date:'medium' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="flex justify-center mt-8">
+  <div class="spinner spinner-lg"></div>
+</div>

@@ -1,0 +1,53 @@
+<div class="app-layout" *ngIf="auth.isLoggedIn; else publicView">
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <span class="material-symbols-rounded" style="font-size: 28px;">neurology</span>
+      </div>
+      <span class="brand-text">MedSeg</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-rounded nav-icon">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/new-case" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-rounded nav-icon">add_circle</span>
+        <span>New Case</span>
+      </a>
+      <a routerLink="/history" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-rounded nav-icon">folder_open</span>
+        <span>History</span>
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+        <span class="material-symbols-rounded nav-icon">person</span>
+        <span>Profile</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">{{ auth.currentUser?.name?.charAt(0) || 'U' }}</div>
+        <div class="user-details">
+          <div class="user-name">{{ auth.currentUser?.name }}</div>
+          <div class="user-role">{{ auth.currentUser?.specialization }}</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm w-full mt-2 flex items-center justify-center gap-2" (click)="auth.logout()">
+        <span class="material-symbols-rounded" style="font-size: 16px;">logout</span>
+        <span>Logout</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<ng-template #publicView>
+  <router-outlet></router-outlet>
+</ng-template>

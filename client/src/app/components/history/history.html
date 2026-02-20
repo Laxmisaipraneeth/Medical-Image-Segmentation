@@ -1,0 +1,51 @@
+<div class="history">
+  <h1>Case History</h1>
+
+  <div *ngIf="loading" class="flex justify-center mt-3">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="!loading && cases.length === 0" class="empty-state glass-card">
+    <p class="text-muted">No cases found. Create your first case.</p>
+    <a routerLink="/new-case" class="btn btn-primary mt-2">➕ New Case</a>
+  </div>
+
+  <div class="cases-table glass-card" *ngIf="!loading && cases.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Modality</th>
+          <th>Body Part</th>
+          <th>Images</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of cases" [routerLink]="['/case', c._id]" class="clickable-row">
+          <td>
+            <div class="patient-name">{{ c.patientDetails.patientName }}</div>
+            <div class="patient-id text-muted">{{ c.patientDetails.patientId }}</div>
+          </td>
+          <td>{{ c.patientDetails.modality }}</td>
+          <td>{{ c.patientDetails.bodyPart }}</td>
+          <td>{{ c.originalImages?.length || 0 }}</td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'badge-success': c.status === 'completed',
+              'badge-processing': c.status === 'processing',
+              'badge-error': c.status === 'error',
+              'badge-created': c.status === 'created' || c.status === 'uploading'
+            }">{{ c.status }}</span>
+          </td>
+          <td>{{ c.createdAt | date:'shortDate' }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteCase(c._id, $event)">🗑</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

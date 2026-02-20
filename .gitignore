@@ -1,0 +1,122 @@
+# ============================================================
+# MedSeg — Root .gitignore
+# Covers: Node/Express (backend), Angular (client),
+#         Python/Flask (ml_service, BCDU-Net), macOS
+# ============================================================
+
+# ===== Node / npm =====
+node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+.pnpm-debug.log*
+package-lock.json
+# Uncomment if you prefer not to commit lockfiles:
+# backend/package-lock.json
+
+# ===== Environment & Secrets =====
+.env
+.env.*
+!.env.example
+*.env
+secrets.json
+config/local.js
+
+# ===== Upload / Generated Files =====
+uploads/
+output_images/
+BCDU-Net/output_images/
+
+# ===== Angular (client/) =====
+client/dist/
+client/.angular/
+client/tmp/
+client/out-tsc/
+client/bazel-out/
+client/coverage/
+client/.sass-cache/
+client/typings/
+client/__screenshots__/
+
+# ===== Python =====
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# ===== ML Model Weights & Data =====
+# Large model weight files — store in cloud storage
+*.hdf5
+*.h5
+*.pkl
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.pb
+
+# Test data that's auto-generated
+ml_service/test_data/
+
+# Model weights (downloaded at runtime)
+ml_service/weights/
+
+# ===== macOS =====
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# ===== IDE & Editors =====
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.sublime-workspace
+*.sublime-project
+
+# ===== Logs =====
+logs/
+*.log
+*.log.*
+
+# ===== OS / Temp =====
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+Thumbs.db

@@ -1,0 +1,90 @@
+<div class="dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="text-primary font-semibold">Welcome back, {{ auth.currentUser?.name }}</h1>
+      <p class="text-muted">{{ auth.currentUser?.hospital }} · {{ auth.currentUser?.specialization }}</p>
+    </div>
+    <a routerLink="/new-case" class="btn btn-primary flex items-center gap-2">
+      <span class="material-symbols-rounded" style="font-size: 18px;">add_circle</span>
+      <span>New Case</span>
+    </a>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card card">
+      <div class="stat-icon-wrapper blue-icon">
+        <span class="material-symbols-rounded stat-icon">folder_open</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ totalCases }}</div>
+        <div class="stat-label">Total Cases</div>
+      </div>
+    </div>
+    <div class="stat-card card">
+      <div class="stat-icon-wrapper green-icon">
+        <span class="material-symbols-rounded stat-icon">check_circle</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ completedCases }}</div>
+        <div class="stat-label">Completed</div>
+      </div>
+    </div>
+    <div class="stat-card card">
+      <div class="stat-icon-wrapper amber-icon">
+        <span class="material-symbols-rounded stat-icon">hourglass_top</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ processingCases }}</div>
+        <div class="stat-label">Processing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Cases -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="font-semibold text-primary">Recent Cases</h2>
+      <a routerLink="/history" class="text-muted flex items-center gap-1 hover-text-primary">
+        <span>View all</span>
+        <span class="material-symbols-rounded" style="font-size: 16px;">arrow_forward</span>
+      </a>
+    </div>
+
+    <div *ngIf="loading" class="flex justify-center mt-8">
+      <div class="spinner spinner-lg"></div>
+    </div>
+
+    <div *ngIf="!loading && recentCases.length === 0" class="empty-state card">
+      <span class="material-symbols-rounded text-muted mb-4" style="font-size: 48px;">inbox</span>
+      <p class="text-primary font-medium mb-1">No cases yet</p>
+      <p class="text-muted text-sm mb-6">Create your first case to get started.</p>
+      <a routerLink="/new-case" class="btn btn-primary">
+        <span class="material-symbols-rounded" style="font-size: 18px;">add</span>
+        New Case
+      </a>
+    </div>
+
+    <div class="cases-list" *ngIf="!loading && recentCases.length > 0">
+      <a *ngFor="let c of recentCases" [routerLink]="['/case', c._id]" class="case-row card">
+        <div class="case-info flex items-center gap-4">
+          <div class="case-icon-bg">
+            <span class="material-symbols-rounded text-primary">medical_services</span>
+          </div>
+          <div>
+            <div class="case-patient">{{ c.patientDetails.patientName }}</div>
+            <div class="case-meta text-muted">
+              {{ c.patientDetails.modality }} · {{ c.patientDetails.bodyPart }} · {{ c.createdAt | date:'mediumDate' }}
+            </div>
+          </div>
+        </div>
+        <span class="badge" [ngClass]="{
+          'badge-success': c.status === 'completed',
+          'badge-processing': c.status === 'processing',
+          'badge-error': c.status === 'error',
+          'badge-created': c.status === 'created' || c.status === 'uploading'
+        }">{{ c.status }}</span>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+Flask==3.0.0
+flask-cors==4.0.0
+numpy
+Pillow
+opencv-python
+torch
+torchvision
+segment-anything @ git+https://github.com/facebookresearch/segment-anything.git

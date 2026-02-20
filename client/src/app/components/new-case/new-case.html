@@ -1,0 +1,175 @@
+<div class="new-case">
+  <div class="mb-8 border-b border-white border-opacity-5 pb-6">
+    <h1 class="text-2xl font-semibold text-primary mb-2">New Case</h1>
+    <p class="text-muted text-sm">Create a new patient record and upload images for segmentation</p>
+  </div>
+
+  <!-- Step Indicator -->
+  <div class="steps">
+    <div class="step" [class.active]="step >= 1" [class.done]="step > 1">
+      <div class="step-dot">
+        <span *ngIf="step <= 1">1</span>
+        <span *ngIf="step > 1" class="material-symbols-rounded" style="font-size: 16px;">check</span>
+      </div>
+      <span>Patient Details</span>
+    </div>
+    <div class="step-line" [class.active]="step > 1"></div>
+    <div class="step" [class.active]="step >= 2" [class.done]="step > 2">
+      <div class="step-dot">
+        <span *ngIf="step <= 2">2</span>
+        <span *ngIf="step > 2" class="material-symbols-rounded" style="font-size: 16px;">check</span>
+      </div>
+      <span>Upload Images</span>
+    </div>
+    <div class="step-line" [class.active]="step > 2"></div>
+    <div class="step" [class.active]="step >= 3">
+      <div class="step-dot">3</div>
+      <span>Segmentation</span>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    <span class="material-symbols-rounded">error</span>
+    {{ error }}
+  </div>
+  <div class="alert alert-success" *ngIf="success">
+    <span class="material-symbols-rounded">check_circle</span>
+    {{ success }}
+  </div>
+
+  <!-- STEP 1: Patient Details -->
+  <div class="card" *ngIf="step === 1">
+    <h2 class="flex items-center gap-2 text-lg font-semibold mb-6">
+      <span class="material-symbols-rounded text-primary">person</span>
+      Patient Information
+    </h2>
+    <form (ngSubmit)="onCreateCase()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Patient Name</label>
+          <input type="text" class="form-control" [(ngModel)]="patient.patientName" name="patientName" required />
+        </div>
+        <div class="form-group">
+          <label>Patient ID</label>
+          <input type="text" class="form-control" [(ngModel)]="patient.patientId" name="patientId" required />
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" class="form-control" [(ngModel)]="patient.age" name="age" min="0" max="150" required />
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select class="form-control" [(ngModel)]="patient.gender" name="gender" required>
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Imaging Modality</label>
+          <select class="form-control" [(ngModel)]="patient.modality" name="modality" required>
+            <option value="">Select</option>
+            <option value="CT">CT</option>
+            <option value="MRI">MRI</option>
+            <option value="X-Ray">X-Ray</option>
+            <option value="Ultrasound">Ultrasound</option>
+            <option value="Microscopy">Microscopy</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Body Part</label>
+          <input type="text" class="form-control" [(ngModel)]="patient.bodyPart" name="bodyPart" placeholder="e.g. Brain, Lung, Liver" required />
+        </div>
+        <div class="form-group">
+          <label>Study Date</label>
+          <input type="date" class="form-control" [(ngModel)]="patient.studyDate" name="studyDate" required />
+        </div>
+      </div>
+      <div class="form-group mb-8">
+        <label>Clinical Notes</label>
+        <textarea class="form-control" [(ngModel)]="patient.clinicalNotes" name="clinicalNotes" placeholder="Optional clinical notes..."></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="btn btn-primary flex items-center gap-2" [disabled]="loading">
+          <span>{{ loading ? 'Creating...' : 'Continue' }}</span>
+          <span class="material-symbols-rounded" *ngIf="!loading" style="font-size: 18px;">arrow_forward</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- STEP 2: Upload Images -->
+  <div class="card" *ngIf="step === 2">
+    <h2 class="flex items-center gap-2 text-lg font-semibold mb-6">
+      <span class="material-symbols-rounded text-primary">upload</span>
+      Upload Images
+    </h2>
+
+    <div class="upload-section">
+      <h3 class="font-medium mb-1">Target Images <span class="required">*</span></h3>
+      <p class="text-muted text-sm mb-4">Upload the medical images you want to segment</p>
+      
+      <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'images')">
+        <div class="drop-zone-content">
+          <span class="material-symbols-rounded drop-icon text-primary mb-3">cloud_upload</span>
+          <p class="mb-4">Drag & drop images here or</p>
+          <label class="btn btn-secondary btn-sm cursor-pointer">
+            Browse Files
+            <input type="file" multiple accept=".png,.jpg,.jpeg" (change)="onImageSelect($event)" hidden />
+          </label>
+        </div>
+        
+        <div *ngIf="imageFiles.length > 0" class="file-list mt-6">
+          <div *ngFor="let f of imageFiles" class="file-item flex items-center gap-2">
+            <span class="material-symbols-rounded" style="font-size: 16px;">image</span>
+            {{ f.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-section mt-8">
+      <h3 class="font-medium mb-1">Support Set <span class="text-muted font-normal">(Optional)</span></h3>
+      <p class="text-muted text-sm mb-4">UniverSeg uses a support set (example image + label pairs) to define the segmentation task. Upload matching pairs for better results.</p>
+      
+      <div class="support-grid">
+        <div>
+          <label class="text-sm font-medium text-muted block mb-2">Support Images</label>
+          <div class="drop-zone drop-zone-sm" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'supportImages')">
+            <label class="btn btn-secondary btn-sm cursor-pointer mb-2">
+              Select Images
+              <input type="file" multiple accept=".png,.jpg,.jpeg" (change)="onSupportImageSelect($event)" hidden />
+            </label>
+            <div *ngIf="supportImageFiles.length > 0" class="file-count">{{ supportImageFiles.length }} files selected</div>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-muted block mb-2">Support Labels (masks)</label>
+          <div class="drop-zone drop-zone-sm" (dragover)="onDragOver($event)" (drop)="onDrop($event, 'supportLabels')">
+            <label class="btn btn-secondary btn-sm cursor-pointer mb-2">
+              Select Labels
+              <input type="file" multiple accept=".png,.jpg,.jpeg" (change)="onSupportLabelSelect($event)" hidden />
+            </label>
+            <div *ngIf="supportLabelFiles.length > 0" class="file-count">{{ supportLabelFiles.length }} files selected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 flex justify-end">
+      <button class="btn btn-primary flex items-center gap-2" (click)="onUploadAndSegment()" [disabled]="loading || imageFiles.length === 0">
+        <span class="material-symbols-rounded" style="font-size: 20px;">model_training</span>
+        Upload & Run Segmentation
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Processing -->
+  <div class="card processing-card flex flex-col items-center justify-center py-16" *ngIf="step === 3 && loading">
+    <div class="spinner spinner-lg mb-6"></div>
+    <h2 class="text-xl font-semibold mb-2">Running Segmentation...</h2>
+    <p class="text-muted text-center max-w-sm">UniverSeg AI model is analyzing your medical images. This may take a moment.</p>
+  </div>
+</div>
